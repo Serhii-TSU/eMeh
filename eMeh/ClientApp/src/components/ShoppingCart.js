@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Counter = () => {
+const ShoppingCart = () => {
   const [currentCount, setCurrentCount] = useState(0);
 
   const incrementCounter = () => {
@@ -17,4 +17,4 @@ const Counter = () => {
   );
 };
 
-export default Counter;
+export default ShoppingCart;

@@ -25,16 +25,17 @@ html {
 
 .brand-name {
   font-weight: bold;
+  font-size: 30px;
 }
 
 .slogan {
-  font-size: 14px;
+  font-size: 10px;
   color: #888; 
-  margin-top: 5px; 
 }
 
 .dropdown-category-name {
   font-weight: bold;
+  color: #3e3e3e; 
 }
 
 .dropdown-category-slogan {
@@ -42,4 +43,16 @@ html {
   color: #888; 
   margin-top: 1px; 
 }
+
+.navmenu-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.navmenu-name {
+  font-size: 10px;
+  color: #888; 
+  margin-top: 1px; 
+}
+
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import './NavMenu.css';
 
 const NavMenu = () => {
@@ -30,28 +32,33 @@ const NavMenu = () => {
               <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
             </NavItem>
             <Dropdown nav isOpen={dropdownOpen} toggle={toggleDropdown}>
-                <DropdownToggle nav caret className="text-dark">
-                  Categories
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem className="brand">
-                    <div className="dropdown-category-name">Beauty & Care</div>
-                    <div className="dropdown-category-slogan">Because You Must</div>
-                  </DropdownItem>
-                  <DropdownItem className="brand">
-                    <div className="dropdown-category-name">Office & School Supplies</div>
-                    <div className="dropdown-category-slogan">Inspiration for Procrastination</div>
-                  </DropdownItem>
-                  <DropdownItem className="brand">
-                    <div className="dropdown-category-name">Food & Grocery</div>
-                    <div className="dropdown-category-slogan">Because Eating, Right?</div>
-                  </DropdownItem>
-                  <DropdownItem className="brand">
-                    <div className="dropdown-category-name">Health & Wellness</div>
-                    <div className="dropdown-category-slogan">Or Whatever</div>
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              <DropdownToggle nav caret className="text-dark">
+                Categories
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem className="brand">
+                  <div className="dropdown-category-name">Beauty & Care</div>
+                  <div className="dropdown-category-slogan">Because You Must</div>
+                </DropdownItem>
+                <DropdownItem className="brand">
+                  <div className="dropdown-category-name">Office & School Supplies</div>
+                  <div className="dropdown-category-slogan">Inspiration for Procrastination</div>
+                </DropdownItem>
+                <DropdownItem className="brand">
+                  <div className="dropdown-category-name">Food & Grocery</div>
+                  <div className="dropdown-category-slogan">Because Eating, Right?</div>
+                </DropdownItem>
+                <DropdownItem className="brand">
+                  <div className="dropdown-category-name">Health & Wellness</div>
+                  <div className="dropdown-category-slogan">Or Whatever</div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <NavItem>
+              <NavLink tag={Link} className="text-dark" to="/shopping-cart">
+                <FontAwesomeIcon icon={faShoppingCart} />
+              </NavLink>
+            </NavItem>
           </ul>
         </Collapse>
       </Navbar>

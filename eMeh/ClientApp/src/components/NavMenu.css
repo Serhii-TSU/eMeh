@@ -33,3 +33,13 @@ html {
   margin-top: 5px; 
 }
 
+.dropdown-category-name {
+  font-weight: bold;
+}
+
+.dropdown-category-slogan {
+  font-size: 10px;
+  color: #888; 
+  margin-top: 1px; 
+}
+

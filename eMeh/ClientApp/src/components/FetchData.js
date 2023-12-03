@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const FetchData = () => {
   const [forecasts, setForecasts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
 
   const renderForecastsTable = (forecasts) => {
     return (
@@ -28,6 +31,14 @@ const FetchData = () => {
       </table>
     );
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      console.log('Category:', categoryParam);
+    }
+  }, [location]);
 
   useEffect(() => {
     const populateWeatherData = async () => {

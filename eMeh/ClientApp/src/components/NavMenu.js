@@ -35,25 +35,25 @@ const NavMenu = () => {
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem>
-                  <NavLink tag={Link} to="/fetch-data?category=Beauty&Care" className="brand">
+                  <NavLink tag={Link} to="/fetch-data?category=BeautyAndCare" className="brand">
                     <div className="dropdown-category-name">Beauty & Care</div>
                     <div className="dropdown-category-slogan">Because You Must</div>
                   </NavLink>
                 </DropdownItem>
                 <DropdownItem>
-                  <NavLink tag={Link} to="/fetch-data?category=Food&Grocery" className="brand">
+                  <NavLink tag={Link} to="/fetch-data?category=FoodAndGrocery" className="brand">
                     <div className="dropdown-category-name">Food & Grocery</div>
                     <div className="dropdown-category-slogan">Because Eating, Right?</div>
                   </NavLink>
                 </DropdownItem>
                 <DropdownItem>
-                  <NavLink tag={Link} to="/fetch-data?category=Health&Wellness" className="brand">
+                  <NavLink tag={Link} to="/fetch-data?category=HealthAndWellness" className="brand">
                     <div className="dropdown-category-name">Health & Wellness</div>
                     <div className="dropdown-category-slogan">Or Whatever</div>
                   </NavLink>
                 </DropdownItem>
                 <DropdownItem>
-                  <NavLink tag={Link} to="/fetch-data?category=Office&SchoolSupplies" className="brand">
+                  <NavLink tag={Link} to="/fetch-data?category=OfficeAndSchoolSupplies" className="brand">
                     <div className="dropdown-category-name">Office & School Supplies</div>
                     <div className="dropdown-category-slogan">Inspiration for Procrastination</div>
                   </NavLink>

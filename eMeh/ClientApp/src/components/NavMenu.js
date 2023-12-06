@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faList, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faList, faShoppingCart, faRightToBracket, faUserPlus, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../AuthContext';
 import './NavMenu.css';
 
 const NavMenu = () => {
+
+  const { isLoggedIn, login, logout } = useAuth();
+
   const [collapsed, setCollapsed] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -60,12 +64,43 @@ const NavMenu = () => {
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <NavItem>
-              <NavLink tag={Link} className="navmenu-item" to="/shopping-cart">
-                <FontAwesomeIcon icon={faShoppingCart} />
-                <span className="navmenu-name">Shopping Cart</span>
-              </NavLink>
-            </NavItem>
+            {isLoggedIn ? (
+              <div style={{ display: "flex" }}>
+                <NavItem>
+                  <NavLink tag={Link} className="navmenu-item" to="/shopping-cart">
+                    <FontAwesomeIcon icon={faShoppingCart} />
+                    <span className="navmenu-name">Shopping Cart</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="navmenu-item" to="/account">
+                    <FontAwesomeIcon icon={faUser} />
+                    <span className="navmenu-name">My account</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="navmenu-item" to="/logout">
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                    <span className="navmenu-name">Log Out</span>
+                  </NavLink>
+                </NavItem>
+              </div>
+              ) : (
+              <div style={{ display: "flex" }}>
+                <NavItem>
+                  <NavLink tag={Link} className="navmenu-item" to="/login">
+                    <FontAwesomeIcon icon={faRightToBracket} />
+                    <span className="navmenu-name">Log In</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="navmenu-item" to="/register">
+                    <FontAwesomeIcon icon={faUserPlus} />
+                    <span className="navmenu-name">Register</span>
+                  </NavLink>
+                </NavItem>
+              </div>
+            )}
           </ul>
         </Collapse>
       </Navbar>

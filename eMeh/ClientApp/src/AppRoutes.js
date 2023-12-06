@@ -1,6 +1,8 @@
 import ShoppingCart from "./components/ShoppingCart";
 import FetchData from "./components/FetchData";
 import Home from "./components/Home";
+import LoginPage from "./components/Authorization/LoginPage";
+import RegisterPage from "./components/Authorization/RegisterPage";
 
 const AppRoutes = [
   {
@@ -14,6 +16,14 @@ const AppRoutes = [
   {
     path: '/fetch-data',
     element: <FetchData />
+  },
+  {
+    path: '/login',
+    element: <LoginPage />
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />
   }
 ];
 

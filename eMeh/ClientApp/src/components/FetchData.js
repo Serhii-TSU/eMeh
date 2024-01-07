@@ -44,7 +44,7 @@ const FetchData = () => {
     const populateWeatherData = async () => {
       try {
         const response = await fetch('weatherforecast');
-        const data = await response.json();
+        const data = await response.json(); debugger
         setForecasts(data);
         setLoading(false);
       } catch (error) {

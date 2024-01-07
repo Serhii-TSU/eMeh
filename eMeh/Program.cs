@@ -1,8 +1,18 @@
+using eMeh.DBContext;
+using eMeh.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+var emehDatabaseSettings = builder.Configuration.GetSection("EmehDatabase").Get<EmehDatabaseSettings>();
+var connectionString = emehDatabaseSettings?.ConnectionString ?? throw new NullReferenceException(nameof(emehDatabaseSettings.ConnectionString));
+var databaseName = emehDatabaseSettings?.DatabaseName ?? throw new NullReferenceException(nameof(emehDatabaseSettings.DatabaseName));
+
+builder.Services.AddDbContext<EmehDbContext>(options => options.UseMongoDB(connectionString, databaseName));
 
 var app = builder.Build();
 

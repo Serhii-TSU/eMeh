@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const FetchData = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  const { logout } = useAuth();
+
   const [forecasts, setForecasts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const location = useLocation();
 
   const renderForecastsTable = (forecasts) => {
     return (
@@ -37,29 +39,45 @@ const FetchData = () => {
   };
 
   useEffect(() => {
+
     const searchParams = new URLSearchParams(location.search);
     const categoryParam = searchParams.get('category');
-    if (categoryParam) {
+
+    if (categoryParam)
       console.log('Category:', categoryParam);
-    }
+
   }, [location]);
 
   useEffect(() => {
+
     const populateWeatherData = async () => {
+
       try {
+
         const response = await fetch('weatherforecast');
+
         if (response.status == 401){
+
+          logout();
           navigate("/login");
+
         }
+
         const data = await response.json(); 
+
         setForecasts(data);
         setLoading(false);
+
       } catch (error) {
+
         console.error('Error fetching data:', error);
+
       }
+
     };
 
     populateWeatherData();
+
   }, []);
 
   let contents = loading ? <p><em>Loading...</em></p> : renderForecastsTable(forecasts);

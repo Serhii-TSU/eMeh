@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const FetchData = () => {
+
+  const navigate = useNavigate();
+
   const [forecasts, setForecasts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,7 +48,10 @@ const FetchData = () => {
     const populateWeatherData = async () => {
       try {
         const response = await fetch('weatherforecast');
-        const data = await response.json(); debugger
+        if (response.status == 401){
+          navigate("/login");
+        }
+        const data = await response.json(); 
         setForecasts(data);
         setLoading(false);
       } catch (error) {

@@ -73,10 +73,10 @@ const RegisterPage = () => {
 
         "name"          : name,
         "surname"       : surname,
-        "country"       : "Pt",
-        "city"          : "Lisbon",
-        "address"       : "Rua Lisbon 1 R/C Esq",
-        "postalCode"    : "1500-050",
+        "country"       : country,
+        "city"          : city,
+        "address"       : address,
+        "postalCode"    : postalCode,
         "email"         : email,
         "phoneNumber"   : phoneNumber,
         "password"      : password

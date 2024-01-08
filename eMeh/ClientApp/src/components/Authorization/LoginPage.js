@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { Button, Form, FormGroup, Label, Input, Container, Row, Col, NavLink } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../AuthContext';
 
 const LoginPage = () => {
 
+  const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
+  const { isLoggedIn, login, logout } = useAuth();
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const [response, setResponse] = useState({
+    message     : "",
+    success     : false,
+    isOpenModal : false,
+  });
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -17,8 +28,50 @@ const LoginPage = () => {
   };
 
   const handleLogin = () => {
-    console.log('Logging in with:', username, password);
+
+    const registerRequest = async () => {
+
+      const method    = "POST";
+
+      const headers   = {
+        "Content-Type"  : "application/json"
+      };
+
+      const body      = JSON.stringify({
+        "email"         : email,
+        "password"      : password
+      });
+
+
+      const responseData  = await fetch('account/login', {
+        method          : method,
+        headers         : headers,
+        body            : body
+      });
+
+      setResponse({ ...response, 
+        success         : responseData.ok,
+        message         : responseData.ok ? await responseData.text() : responseData.status + ": " + responseData.statusText,
+        isOpenModal     : true,
+      });
+
+    };
+
+    registerRequest();
+
   };
+
+  const handleCloseModalButtonClick = () => {
+    if (response.success){
+      login();
+      navigate("/");
+    }
+    else {
+      setResponse({ ...response,
+        isOpenModal     : false,
+      });
+    }
+  }
 
   return (
     <Container fluid>
@@ -28,12 +81,12 @@ const LoginPage = () => {
             <h2>Login</h2>
             <Form>
               <FormGroup>
-                <Label for="username">Username:</Label>
+                <Label for="email">Email:</Label>
                 <Input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={handleUsernameChange}
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={handleEmailChange}
                 />
               </FormGroup>
               <FormGroup>
@@ -56,6 +109,17 @@ const LoginPage = () => {
               </div>
             </Form>
           </div>
+          <Modal isOpen={response.isOpenModal}>
+            <ModalHeader style={{ backgroundColor: response.success ? '#3B71CA' : '#DC4C64', color: 'white' }}>Response Message</ModalHeader>
+            <ModalBody>
+              {response.message}
+            </ModalBody>
+            <ModalFooter>
+              <Button color='secondary' onClick={handleCloseModalButtonClick}>
+                {response.success ? 'Go to Home page' : 'Close'}
+              </Button>
+            </ModalFooter>
+          </Modal>
         </Col>
       </Row>
     </Container>

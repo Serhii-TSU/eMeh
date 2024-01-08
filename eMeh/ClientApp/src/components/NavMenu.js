@@ -1,20 +1,71 @@
 import React, { useState } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faList, faShoppingCart, faRightToBracket, faUserPlus, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../AuthContext';
+import { useNavigate } from "react-router-dom";
 import './NavMenu.css';
 
 const NavMenu = () => {
+
+  const navigate = useNavigate();
 
   const { isLoggedIn, login, logout } = useAuth();
 
   const [collapsed, setCollapsed] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const [response, setResponse] = useState({
+
+    message     : "",
+    success     : false,
+    isOpenModal : false,
+
+  });
+
   const toggleNavbar = () => setCollapsed(!collapsed);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  const handleLogoutClick = () => {
+    const registerRequest = async () => {
+
+      const method    = "POST";
+
+      const headers   = {
+        "Content-Type"  : "application/json"
+      };
+
+      const responseData  = await fetch('account/logout', {
+        method          : method,
+        headers         : headers,
+      });
+
+      setResponse({ ...response, 
+        success         : responseData.ok,
+        message         : responseData.ok ? await responseData.text() : responseData.status + ": " + responseData.statusText,
+        isOpenModal     : true,
+      });
+
+    };
+
+    registerRequest();
+  }
+
+  const handleCloseModalButtonClick = () => {
+    if (response.success){
+      logout();
+      navigate("/login");
+      setResponse({ ...response,
+        isOpenModal     : false,
+      });
+    }
+    else {
+      setResponse({ ...response,
+        isOpenModal     : false,
+      });
+    }
+  }
 
   return (
     <header>
@@ -73,13 +124,13 @@ const NavMenu = () => {
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="navmenu-item" to="/account">
+                  <NavLink tag={Link} className="navmenu-item" to="/myaccount">
                     <FontAwesomeIcon icon={faUser} />
                     <span className="navmenu-name">My account</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="navmenu-item" to="/logout">
+                  <NavLink tag={Link} className="navmenu-item" onClick={handleLogoutClick}>
                     <FontAwesomeIcon icon={faRightFromBracket} />
                     <span className="navmenu-name">Log Out</span>
                   </NavLink>
@@ -103,6 +154,17 @@ const NavMenu = () => {
             )}
           </ul>
         </Collapse>
+        <Modal isOpen={response.isOpenModal}>
+            <ModalHeader style={{ backgroundColor: response.success ? '#3B71CA' : '#DC4C64', color: 'white' }}>Response Message</ModalHeader>
+            <ModalBody>
+              {response.message}
+            </ModalBody>
+            <ModalFooter>
+              <Button color='secondary' onClick={handleCloseModalButtonClick}>
+                Close
+              </Button>
+            </ModalFooter>
+          </Modal>
       </Navbar>
     </header>
   );

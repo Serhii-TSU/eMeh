@@ -116,7 +116,7 @@ const LoginPage = () => {
             </ModalBody>
             <ModalFooter>
               <Button color='secondary' onClick={handleCloseModalButtonClick}>
-                {response.success ? 'Go to Home page' : 'Close'}
+                Close
               </Button>
             </ModalFooter>
           </Modal>

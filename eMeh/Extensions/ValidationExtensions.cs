@@ -1,33 +1,77 @@
 ﻿using eMeh.Models;
-using Newtonsoft.Json;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
 namespace eMeh.Extensions
 {
     internal static class ValidationExtensions
     {
-        internal static User DeserializedAndValidated(this JsonValue userJson)
+        internal static User Update(this User userDb, UserData userData)
         {
-            if (userJson == null)
-                throw new NullReferenceException("JsonValue received from the request body is null.");
+            if (userDb.Name != userData.Name && !string.IsNullOrEmpty(userData.Name))
+                userDb.Name = userData.Name;
 
-            var user = JsonConvert.DeserializeObject<User>(userJson.ToString());
+            if (userDb.Surname != userData.Surname && !string.IsNullOrEmpty(userData.Surname))
+                userDb.Surname = userData.Surname;
 
-            if (user == null)
-                throw new JsonException($"Failed to deserialize JSON: {nameof(userJson)}");
+            if (userDb.Country != userData.Country && !string.IsNullOrEmpty(userData.Country))
+                userDb.Country = userData.Country;
 
+            if (userDb.City != userData.City && !string.IsNullOrEmpty(userData.City))
+                userDb.City = userData.City;
 
-            ValidateField(user.Name, "Name");
-            ValidateField(user.Surname, "Surname");
-            ValidateField(user.Country, "Country");
-            ValidateField(user.City, "City");
-            ValidateField(user.Address, "Address");
-            ValidateField(user.PostalCode, "PostalCode");
-            ValidateEmail(user.Email, "Email");
-            ValidatePhoneNumber(user.PhoneNumber, "PhoneNumber");
+            if (userDb.Address != userData.Address && !string.IsNullOrEmpty(userData.Address))
+                userDb.Address = userData.Address;
 
-            return user;
+            if (userDb.PostalCode != userData.PostalCode && !string.IsNullOrEmpty(userData.PostalCode))
+                userDb.PostalCode = userData.PostalCode;
+
+            if (userDb.Email != userData.Email && !string.IsNullOrEmpty(userData.Email))
+                userDb.Email = userData.Email;
+
+            if (userDb.PhoneNumber != userData.PhoneNumber && !string.IsNullOrEmpty(userData.PhoneNumber))
+                userDb.PhoneNumber = userData.PhoneNumber;
+
+            if (userDb.Password != userData.Password && !string.IsNullOrEmpty(userData.Password))
+                userDb.Password = userData.Password;
+
+            return userDb;
+        }
+
+        internal static User ClearSensitiveData(this User userDb)
+        {
+            userDb.Password = string.Empty;
+
+            return userDb;
+        }
+
+        internal static User ToEntity(this UserData userData)
+        {
+            ValidateUserData(userData);
+
+           return new User
+           {
+               Name         = userData.Name,
+               Surname      = userData.Surname,
+               Country      = userData.Country,
+               City         = userData.City,
+               Address      = userData.Address,
+               PostalCode   = userData.PostalCode,
+               Email        = userData.Email,
+               PhoneNumber  = userData.PhoneNumber,
+               Password     = userData.Password,
+           };
+        }
+
+        private static void ValidateUserData(UserData userData)
+        {
+            ValidateField(userData.Name, "Name");
+            ValidateField(userData.Surname, "Surname");
+            ValidateField(userData.Country, "Country");
+            ValidateField(userData.City, "City");
+            ValidateField(userData.Address, "Address");
+            ValidateField(userData.PostalCode, "PostalCode");
+            ValidateEmail(userData.Email, "Email");
+            ValidatePhoneNumber(userData.PhoneNumber, "PhoneNumber");
         }
 
         private static void ValidateField(string? value, string fieldName)

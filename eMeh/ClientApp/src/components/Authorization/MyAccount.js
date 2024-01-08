@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, FormGroup, Label, Input, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../AuthContext';
 
 const MyAccountPage = () => {
 
   const navigate = useNavigate();
 
+  const { logout } = useAuth();
+
   const initialState = {
 
-    "Id"            : null,
-    "Name"          : null,
-    "Surname"       : null,
-    "Country"       : null,
-    "City"          : null,
-    "Address"       : null,
-    "PostalCode"    : null,
-    "Email"         : null,
-    "PhoneNumber"   : null,
-    "Password"      : null
+    "Id"            : '',
+    "Name"          : '',
+    "Surname"       : '',
+    "Country"       : '',
+    "City"          : '',
+    "Address"       : '',
+    "PostalCode"    : '',
+    "Email"         : '',
+    "PhoneNumber"   : '',
+    "Password"      : '',
 
   };
 
@@ -55,6 +58,11 @@ const MyAccountPage = () => {
 
 
   const handleNameChange = (e) => {
+
+    if (e.target.value == null){
+        debugger
+    }
+
     setData({
         ...data,
         userData: {
@@ -148,22 +156,23 @@ const MyAccountPage = () => {
 
     const registerRequest = async () => {
 
-      const method    = "POST";
-
-      const headers   = {
-        "Content-Type"  : "application/json"
+      const method       = "POST";
+      
+      const headers      = {
+        "Content-Type"   : "application/json"
       };
 
-      const body      = JSON.stringify(data.userData);
+      const userJson     = JSON.stringify(data.userData);
 
-      const responseData  = await fetch('users/update', {
-        method          : method,
-        headers         : headers,
-        body            : body
+      const responseData = await fetch('users/update', {
+        method           : method,
+        headers          : headers,
+        body             : userJson
       });
 
       
       if (responseData.status == 401){
+        logout();
         navigate("/login");
       }
 
@@ -188,15 +197,45 @@ const MyAccountPage = () => {
     navigate("/myaccount");
   }
 
+  const handleDeleteButtonClick = () => {
+
+    const registerRequest = async () => {
+
+        const method       = "DELETE";
+      
+        const headers      = {
+        "Content-Type"   : "application/json"
+        };
+
+        const responseData = await fetch('users/delete', {
+        method           : method,
+        headers          : headers,
+        });
+
+        if (responseData.status == 401){
+            logout();
+            navigate("/login");
+          }
+
+        setData({ ...data, 
+            success      : responseData.ok,
+            message      : responseData.ok ? await responseData.text() : responseData.status + ": " + responseData.statusText,
+            isOpenModal  : true,
+        });
+
+        logout();
+        navigate("/");
+    }
+
+    registerRequest();
+    
+  }
+
   const handleCloseModalButtonClick = () => {
-    if (data.success){
-      navigate("/login");
-    }
-    else {
-        setData({ ...data,
-        isOpenModal     : false,
-      });
-    }
+    setData({ ...data,
+        isOpenModal : false,
+    });
+    setInEditMode(false);
   }
 
   return (
@@ -299,8 +338,11 @@ const MyAccountPage = () => {
               <Button color="primary" onClick={updateAccount} style={{ margin: "0px 20px 50px 0px", "display" : inEditMode ? 'inline-block' : 'none' }}>
                 Update Account
               </Button>
-              <Button color="primary" onClick={handleEditButtonClick} style={{ margin: "0px 20px 50px 0px", "display" : !inEditMode ? 'inline-block' : 'none' }}>
+              <Button color="primary" onClick={handleEditButtonClick} style={{ paddingRight: "30px", paddingLeft: "30px", margin: "0px 20px 50px 0px", "display" : !inEditMode ? 'inline-block' : 'none' }}>
                 Edit
+              </Button>
+              <Button color="primary" onClick={handleDeleteButtonClick} style={{ margin: "0px 20px 50px 0px", "display" : !inEditMode ? 'inline-block' : 'none' }}>
+                Delete Account
               </Button>
               <Button color="secondary" onClick={handleCancelButtonClick} style={{ margin: "0px 20px 50px 0px", "display" : inEditMode ? 'inline-block' : 'none' }}>
                 Cancel
@@ -314,7 +356,7 @@ const MyAccountPage = () => {
             </ModalBody>
             <ModalFooter>
               <Button color='secondary' onClick={handleCloseModalButtonClick}>
-                {data.success ? 'Proceed to the Login Page' : 'Close'}
+                Close
               </Button>
             </ModalFooter>
           </Modal>

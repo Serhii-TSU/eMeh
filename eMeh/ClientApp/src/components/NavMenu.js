@@ -90,6 +90,12 @@ const NavMenu = () => {
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem>
+                  <NavLink tag={Link} to="/fetch-data?category=All" className="brand">
+                    <div className="dropdown-category-name">All Cetegories</div>
+                    <div className="dropdown-category-slogan">See All Products</div>
+                  </NavLink>
+                </DropdownItem>
+                <DropdownItem>
                   <NavLink tag={Link} to="/fetch-data?category=BeautyAndCare" className="brand">
                     <div className="dropdown-category-name">Beauty & Care</div>
                     <div className="dropdown-category-slogan">Because You Must</div>

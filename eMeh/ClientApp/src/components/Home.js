@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -75,6 +76,9 @@ const AdContainer = styled.div`
 `;
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
   const [showAd, setShowAd] = useState(false);
 
   useEffect(() => {
@@ -89,13 +93,17 @@ const Home = () => {
     return () => clearInterval(adTimer);
   }, []);
 
+  const handleClick = () => {
+    navigate("/fetch-data?category=All")
+  }
+
   return (
     <>
       <Container>
         <Content>
           <Title>Welcome to Emeh!</Title>
           <Subtitle>Discover the unexpected.</Subtitle>
-          <Button>Start Exploring</Button>
+          <Button onClick={handleClick}>Start Exploring</Button>
         </Content>
       </Container>
       <AdContainer show={showAd}>Check out our annoying ad!</AdContainer>

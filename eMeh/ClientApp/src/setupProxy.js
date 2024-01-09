@@ -8,6 +8,7 @@ const context = [
   "/weatherforecast",
   "/users",
   "/account",
+  "/products"
 ];
 
 const onError = (err, req, resp, target) => {

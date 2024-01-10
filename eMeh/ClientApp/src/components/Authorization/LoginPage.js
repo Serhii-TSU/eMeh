@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, FormGroup, Label, Input, Container, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const { isLoggedIn, login, logout } = useAuth();
+  const { v1, v2, login } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +18,16 @@ const LoginPage = () => {
     success     : false,
     isOpenModal : false,
   });
+
+  useEffect(() => {
+
+    if (response.message === "")
+      return;
+
+    if (response.message.includes('v1'))v1()
+    if (response.message.includes('v2'))v2()
+
+  }, [response])
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -54,7 +64,6 @@ const LoginPage = () => {
         message         : responseData.ok ? await responseData.text() : responseData.status + ": " + responseData.statusText,
         isOpenModal     : true,
       });
-
     };
 
     registerRequest();

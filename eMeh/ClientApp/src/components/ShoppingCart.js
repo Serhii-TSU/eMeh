@@ -2,20 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Button, ButtonGroup, ButtonToolbar } from 'reactstrap';
+import { Button, ButtonGroup, ButtonToolbar, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
 const ShoppingCart = () => {
 
   const navigate = useNavigate();
 
-  const { logout } = useAuth();
+  const { apiVersion, logout } = useAuth();
 
   const { isLoggedIn } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
-  const [total, setTotal] = useState([]);
+
+  const [data, setData] = useState({
+
+    message     : '',
+    success     : false,
+    isOpenModal : false,
+
+  });
+
 
   const updateProductsRequest = async () => {
 
@@ -158,6 +166,42 @@ const ShoppingCart = () => {
 
   let contents = loading ? <p><em>Loading...</em></p> : renderCartProductsTable(products);
 
+  const handleCompleteOrderButtonClick = () => {
+    const registerRequest = async () => {
+
+      const method    = "POST";
+
+      const headers   = {
+        "Content-Type"  : "application/json"
+      };
+
+      const responseData  = await fetch('api/orders/complete?api-version=' + apiVersion + '.0', {
+        method          : method,
+        headers         : headers,
+      });
+
+      if (responseData.status == 401){
+        logout();
+        navigate("/login");
+      }
+
+      setData({ ...data, 
+        success      : responseData.ok,
+        message      : responseData.ok ? await responseData.text() : responseData.status + ": " + responseData.statusText,
+        isOpenModal  : true,
+    });
+
+    };
+
+    registerRequest();
+  }
+
+  const handleCloseModalButtonClick = () => {
+    setData({ ...data,
+        isOpenModal : false,
+    });
+  }
+
 
   return (
     <div>
@@ -166,6 +210,18 @@ const ShoppingCart = () => {
           <h1 id="tableLabel">Shopping Cart</h1>
           <p>This component demonstrates fetching data from the server.</p>
           {contents}
+          <Button color="primary" onClick={handleCompleteOrderButtonClick}>Complete Order</Button>
+          <Modal isOpen={data.isOpenModal}>
+            <ModalHeader style={{ backgroundColor: data.success ? '#3B71CA' : '#DC4C64', color: 'white' }}>Response Message</ModalHeader>
+            <ModalBody>
+              {data.message}
+            </ModalBody>
+            <ModalFooter>
+              <Button color='secondary' onClick={handleCloseModalButtonClick}>
+                Close
+              </Button>
+            </ModalFooter>
+          </Modal>
         </div>
       ) : (
         <Navigate to="/login" />

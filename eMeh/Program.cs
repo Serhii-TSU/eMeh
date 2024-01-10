@@ -1,6 +1,8 @@
 using eMeh.DBContext;
+using eMeh.Middleware;
 using eMeh.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -66,6 +68,8 @@ builder.Services.AddAuthentication(options =>
             {
                 ctx.Response.Cookies.Delete("token");
                 ctx.Response.Cookies.Delete("UserId");
+                ctx.Response.Cookies.Delete("HasPhoneNumber");
+
             }
         }
 
@@ -81,6 +85,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 });
 
+builder.Services.AddApiVersioning(x =>
+{
+    x.DefaultApiVersion = new ApiVersion(1, 0);
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.ReportApiVersions = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -90,12 +101,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseApiVersioning();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ApiVersionMiddleware>();
 
 
 app.MapControllerRoute(

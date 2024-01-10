@@ -63,9 +63,11 @@ namespace eMeh.Controllers
 
                     HttpContext.Response.Cookies.Append("token", new JwtSecurityTokenHandler().WriteToken(token));
                     HttpContext.Response.Cookies.Append("UserId", user.Id.ToString());
+                    HttpContext.Response.Cookies.Append("HasPhoneNumber", string.IsNullOrEmpty(user.PhoneNumber) ? "false" : "true");
 
+                    var apiVersion = string.IsNullOrEmpty(user.PhoneNumber) ? "v2" : "v1";
 
-                    return Ok("Logged in successfully.");
+                    return Ok("Logged in successfully. ApiVersion: " + apiVersion);
                 }
 
                 return Unauthorized();
@@ -82,47 +84,9 @@ namespace eMeh.Controllers
         {
             HttpContext.Response.Cookies.Delete("token");
             HttpContext.Response.Cookies.Delete("UserId");
+            HttpContext.Response.Cookies.Delete("HasPhoneNumber");
 
             return Ok("Logged out successfully.");
-        }
-
-        private async Task AuthorizeAsync(ActionContext actionContext, AuthorizationPolicy policy)
-        {
-            //var httpContext = actionContext.HttpContext;
-            //var authenticateResult = await policyEvaluator.AuthenticateAsync(policy, httpContext);
-            //var authorizeResult = await policyEvaluator.AuthorizeAsync(policy, authenticateResult, httpContext, actionContext.ActionDescriptor);
-            //if (authorizeResult.Challenged)
-            //{
-            //    if (policy.AuthenticationSchemes.Count > 0)
-            //    {
-            //        foreach (var scheme in policy.AuthenticationSchemes)
-            //        {
-            //            await httpContext.ChallengeAsync(scheme);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await httpContext.ChallengeAsync();
-            //    }
-
-            //    return;
-            //}
-            //else if (authorizeResult.Forbidden)
-            //{
-            //    if (policy.AuthenticationSchemes.Count > 0)
-            //    {
-            //        foreach (var scheme in policy.AuthenticationSchemes)
-            //        {
-            //            await httpContext.ForbidAsync(scheme);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await httpContext.ForbidAsync();
-            //    }
-
-            //    return;
-            //}
         }
     }
 }

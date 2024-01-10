@@ -10,6 +10,7 @@ const context = [
   "/account",
   "/products",
   "/cart",
+  "/api/orders",
 ];
 
 const onError = (err, req, resp, target) => {

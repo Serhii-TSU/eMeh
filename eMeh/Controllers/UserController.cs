@@ -107,6 +107,7 @@ namespace eMeh.Controllers
 
             HttpContext.Response.Cookies.Delete("token");
             HttpContext.Response.Cookies.Delete("UserId");
+            HttpContext.Response.Cookies.Delete("HasPhoneNumber");
 
             return Ok("User deleted successfully");
         }

@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [apiVersion, setApiVersion] = useState('1');
 
 
   const login = () => {
@@ -17,8 +18,16 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(false);
   };
 
+  const v1 = () => {
+    setApiVersion('1');debugger
+  };
+
+  const v2 = () => {
+    setApiVersion('2');
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, apiVersion, v1, v2, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

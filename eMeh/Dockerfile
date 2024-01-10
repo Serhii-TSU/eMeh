@@ -1,22 +1,18 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["eMeh/eMeh.csproj", "eMeh/"]
-RUN dotnet restore "eMeh/eMeh.csproj"
+﻿# Build Stage
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /source
 COPY . .
-WORKDIR "/src/eMeh"
-RUN dotnet build "eMeh.csproj" -c Release -o /app/build
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y nodejs \
+    npm  
+RUN dotnet restore "./eMeh/eMeh.csproj" --disable-parallel
+RUN dotnet publish "./eMeh/eMeh.csproj" -c release -o /app --no-restore
 
-FROM build AS publish
-RUN dotnet publish "eMeh.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+# Serve Stage
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app ./
+
+EXPOSE 5000
+
 ENTRYPOINT ["dotnet", "eMeh.dll"]

@@ -71,8 +71,8 @@ const NavMenu = () => {
     <header>
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
         <NavbarBrand tag={Link} to="/" className="brand">
-          <div className="brand-name">eMeh</div>
-          <div className="slogan">When you need something, but you're not entirely sure what.</div>
+          <div className="brand-name" style={{ fontFamily: "Genos" }}>eMeh</div>
+          <div className="slogan" style={{ fontFamily: "Playfair Display" }}>When you need something, but you're not entirely sure what.</div>
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2" />
         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>

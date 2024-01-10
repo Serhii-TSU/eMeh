@@ -1,4 +1,5 @@
 ﻿using eMeh.Models;
+using MongoDB.Bson;
 using System.Text.RegularExpressions;
 
 namespace eMeh.Extensions
@@ -60,6 +61,17 @@ namespace eMeh.Extensions
                PhoneNumber  = userData.PhoneNumber,
                Password     = userData.Password,
            };
+        }
+
+        internal static CartProduct ToEntity(this CartProductData cartProductData)
+        {
+            return new CartProduct
+            {
+                ProductId   = cartProductData.Id,
+                UserId      = cartProductData.UserId,
+                Quantity    = cartProductData.Quantity,
+                DateTime    = cartProductData.DateTime,
+            };
         }
 
         private static void ValidateUserData(UserData userData)

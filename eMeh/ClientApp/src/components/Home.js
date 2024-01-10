@@ -100,7 +100,7 @@ const Home = () => {
   return (
     <>
       <Container>
-        <Content>
+        <Content style={{ fontFamily: "Playfair Display" }}>
           <Title>Welcome to Emeh!</Title>
           <Subtitle>Discover the unexpected.</Subtitle>
           <Button onClick={handleClick}>Start Exploring</Button>

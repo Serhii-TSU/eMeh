@@ -21,6 +21,7 @@ const ProductsList = ({ products }) => {
           {products.map((product, index) => (
             <Col key={index} md={3} sm={5} xs={12}>
               <Product
+                id={product.id}
                 name={product.name}
                 image={product.image}
                 description={product.description}

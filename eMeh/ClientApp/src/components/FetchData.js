@@ -86,29 +86,11 @@ const FetchData = () => {
 
   return (
     <div>
-      <h1 id="tableLabel">Welcome to Our Shop</h1>
-      <p>Congratulations on stumbling upon a digital wonderland where confusion meets curiosity and indecision finds a home.</p>
+      <h1 id="tableLabel" style={{ width: "100%", textAlign: "center", padding: "20px", fontFamily: "Playfair Display" }}>WELCOME TO OUR SHOP</h1>
+      <p style={{ width: "100%", textAlign: "center", fontFamily: "Playfair Display" }}>Congratulations on stumbling upon a digital wonderland where confusion meets curiosity and indecision finds a home.</p>
       {contents}
     </div>
   );
 };
 
 export default FetchData;
-
-
-
-
-// const FetchData = () => {
-
-
-  
-
-//   return (
-//     <div>
-//       <h1>Welcome to Our Shop</h1>
-//       <ProductsList products={products} />
-//     </div>
-//   );
-// };
-
-// export default FetchData;

@@ -9,6 +9,7 @@ namespace eMeh.DBContext
     {
         public DbSet<User> Users { get; init; }
         public DbSet<Product> Products { get; init; }
+        public DbSet<CartProduct> Cart { get; init; }
 
         public static EmehDbContext Create(IMongoDatabase database) =>
             new(new DbContextOptionsBuilder<EmehDbContext>()
@@ -25,6 +26,7 @@ namespace eMeh.DBContext
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().ToCollection("users");
             modelBuilder.Entity<Product>().ToCollection("products");
+            modelBuilder.Entity<CartProduct>().ToCollection("cart");
         }
     }
 }

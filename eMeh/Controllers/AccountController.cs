@@ -55,7 +55,7 @@ namespace eMeh.Controllers
 
                     var token = new JwtSecurityToken(
 
-                        expires             : DateTime.Now.AddMinutes(3),
+                        expires             : DateTime.Now.AddMinutes(30),
                         claims              : authClaims,
                         signingCredentials  : new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
 
